@@ -25,16 +25,19 @@ namespace geometry3Test
 #if DEBUG
             Util.DebugBreakOnDevAssert = true;
 #endif
-            test_PlanarRemesher.Test_remesh();
+            // test_PlanarRemesher.Test_remesh();
             // test_MeshOps.test_cut_external();
             // test_MeshOps.test_cut();
+            // test_Bool.test_union();
+            // test_Bool.test_subtraction();
+            test_Bool.test_intersection();
 
             Console.ReadKey();
             return;
 
             
             
-            test_Bool.test_union();
+            
 
             test_VectorTypes.test_rcvector();
             test_VectorTypes.test_bitarrays();
