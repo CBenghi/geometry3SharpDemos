@@ -70,11 +70,14 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="test_Bool.cs" />
     <Compile Include="test_Debugging.cs" />
     <Compile Include="test_DGraph2.cs" />
     <Compile Include="test_DMesh3.cs" />
     <Compile Include="test_Deformers.cs" />
     <Compile Include="test_Grids.cs" />
+    <Compile Include="test_PlanarRemesher.cs" />
+    <Compile Include="test_MeshOps.cs" />
     <Compile Include="test_MeshRegionBoundary.cs" />
     <Compile Include="test_MeshBoundary.cs" />
     <Compile Include="test_Dijkstra.cs" />
