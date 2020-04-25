@@ -24,13 +24,17 @@ namespace geometry3Test
 
 
 
-        public static void WriteTestOutputMesh(IMesh mesh, string sFilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
+        public static string WriteTestOutputMesh(IMesh mesh, string sFilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
             OBJWriter writer = new OBJWriter();
-            var s = new System.IO.StreamWriter(Program.TEST_OUTPUT_PATH + sFilename, false);
+
+            var fileName = Program.TEST_OUTPUT_PATH + sFilename;
+            FileInfo f = new FileInfo(fileName);
+            var s = new System.IO.StreamWriter(fileName, false);
             writer.Write(s, new List<WriteMesh> { new WriteMesh(mesh) }, 
                 new WriteOptions() { bPerVertexNormals = true, bWriteGroups = write_groups, bPerVertexColors = write_vtxcolors, bPerVertexUVs = write_vtxuv } );
 			s.Close();
+            return f.FullName;
         }
         public static void WriteTestOutputMeshes(List<IMesh> meshes, string sFilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
@@ -77,16 +81,10 @@ namespace geometry3Test
             svg.Write(Program.TEST_OUTPUT_PATH + sFilename);
         }
 
-
-
-
-
         public static void WriteTestOutputStrings(string[] lines, string sFilename)
         {
             File.WriteAllLines(Program.TEST_OUTPUT_PATH + sFilename, lines);
         }
-
-
 
         public static void WriteDebugMesh(IMesh mesh, string sfilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
@@ -107,7 +105,6 @@ namespace geometry3Test
             writer.Write(s, wm, new WriteOptions() { bCombineMeshes = false, bWriteGroups = write_groups, bPerVertexColors = write_vtxcolors, bPerVertexUVs = write_vtxuv } );
 			s.Close();
 		}
-
 
         // extension methods for Random
         public static Vector3d Direction(this Random rand)

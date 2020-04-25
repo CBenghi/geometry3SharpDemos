@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using g3;
+using System.Xml.Serialization;
 
 namespace geometry3Test
 {
@@ -123,7 +124,54 @@ namespace geometry3Test
         }
 
 
+        public static void test_mesh_builder_104()
+        {
+            var vertices = new List<Vector3f>
+            {
+                new Vector3f(0, 0, 0),              // 0
+                new Vector3f(1000, 0, 0),           // 1
+                new Vector3f(1000, 200, 0),         // 2
+                new Vector3f(0, 200, 0),            // 3
+                new Vector3f(1000, 0, 200),         // 4
+                new Vector3f(0, 0, 200),            // 5
+                new Vector3f(1000, 0, -200),        // 6
+                new Vector3f(0, 0, -200),           // 7
+                new Vector3f(1000, -200, 0),        // 8
+                new Vector3f(0, -200, 0)            // 9
+            };
 
+            var triangles = new List<Index3i>
+            {
+                new Index3i(0, 1, 2),
+                new Index3i(0, 2, 3),
+                new Index3i(0, 4, 1),
+                new Index3i(0, 5, 4),
+                new Index3i(0, 1, 6), // Does not show
+                new Index3i(0, 6, 7),
+                new Index3i(0, 8, 1), // Does not show
+                new Index3i(0, 9, 8)
+            };
+
+            var mesh = DMesh3Builder.Build<Vector3f, Index3i, Vector3f>(vertices, triangles);
+
+            Console.WriteLine($"Number of triangles: {mesh.TriangleCount}"); // Outputs 6, because mesh is not manifold
+            Console.WriteLine($"Vertex Issues: {mesh.FindMetadata("AppendVertexIssues")}");
+            Console.WriteLine($"Triangle Issues: {mesh.FindMetadata("AppendTriangleIssues")}");
+
+            // for greater control of the meshing process use DMesh3Builder class
+            Console.WriteLine("Trying again with DMesh3Builder instance");
+            DMesh3Builder builder = new DMesh3Builder();
+            builder.NonManifoldTriBehavior = DMesh3Builder.AddTriangleFailBehaviors.DuplicateAllVertices;
+            mesh = builder.AppendMesh<Vector3f, Index3i, Vector3f>(vertices, triangles);
+            Console.WriteLine($"Number of triangles: {mesh.TriangleCount}"); // Outputs 8, because non manifold is allowed
+            Console.WriteLine($"Triangle Issues: {mesh.FindMetadata("AppendTriangleIssues")}");
+            Console.WriteLine($"Normals: {mesh.FindMetadata("Normals")}");
+            Console.WriteLine($"TriGroups: {mesh.FindMetadata("TriGroups")}");
+
+            var outF = TestUtil.WriteTestOutputMesh(mesh, "Issue104.obj");
+            Console.WriteLine($"Written to: {outF}");
+            
+        }
 
 
         public static void test_mesh_builders()

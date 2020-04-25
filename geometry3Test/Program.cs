@@ -15,7 +15,6 @@ namespace geometry3Test
 			get { return Util.IsRunningOnMono() ? "../../test_output/" : "..\\..\\test_output\\"; }
 		}
 
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -30,7 +29,8 @@ namespace geometry3Test
             // test_MeshOps.test_cut();
             // test_Bool.test_union();
             // test_Bool.test_subtraction();
-            test_Bool.test_intersection();
+            // test_Bool.test_intersection();
+            test_MeshGen.test_mesh_builder_104();
 
             Console.ReadKey();
             return;
@@ -83,6 +83,7 @@ namespace geometry3Test
             test_MeshGen.test_tube_generator();
             test_MeshGen.test_voxel_surface();
             test_MeshGen.test_mesh_builders();
+            
             test_MeshGen.test_marching_cubes();
             test_MeshGen.test_marching_cubes_levelset();
             test_MeshGen.test_marching_cubes_topology();
