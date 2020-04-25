@@ -1,5 +1,6 @@
 ﻿using g3;
 using g3.mesh;
+using gs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,70 +10,52 @@ namespace geometry3Test
 {
     internal class test_Bool
     {
-        internal static void test_union()
+        private static void TestFiles(string file1, string file2, MeshBoolean.boolOperation op)
         {
-            Console.WriteLine("Testing boolean union.");
-            DMesh3 b1 = TestUtil.LoadTestInputMesh("box1.obj");
-            DMesh3 b2 = TestUtil.LoadTestInputMesh("box2.obj");
-            var pOut = Path.ChangeExtension(Path.GetTempFileName(), "obj");
-
+            Console.WriteLine($"Testing {op} on : {file1}, {file2}");
+            DMesh3 b1 = TestUtil.LoadTestInputMesh(file1);
+            DMesh3 b2 = TestUtil.LoadTestInputMesh(file2);
             Stopwatch s = new Stopwatch();
             s.Start();
+            var ret = PerformBoolean(b1, b2, op);
+            s.Stop();
+            var outF = TestUtil.WriteTestOutputMesh(ret, $"Bool_{op}.obj");
+            Console.WriteLine($"Model: {outF} in {s.ElapsedMilliseconds} ms.");
+        }
+
+        private static DMesh3 PerformBoolean(DMesh3 b1, DMesh3 b2, MeshBoolean.boolOperation op)
+        {
             var mBool = new MeshBoolean();
             mBool.Target = b1;
             mBool.Tool = b2;
-            mBool.Compute(MeshBoolean.boolOperation.Union);
-
+            mBool.Compute(op);
             PlanarRemesher p = new PlanarRemesher(mBool.Result);
             p.Remesh();
 
-            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
-            IOWriteResult result = StandardMeshWriter.WriteFile(pOut, new List<WriteMesh>() { new WriteMesh(mBool.Result) }, WriteOptions.Defaults);
-            Console.WriteLine($"{result.message } file: {pOut}");
+            MeshRepairOrientation rep = new MeshRepairOrientation(mBool.Result);
+            rep.OrientComponents();
+            rep.SolveGlobalOrientation();
+            
+            return mBool.Result;
+        }
+
+        internal static void test_union()
+        {
+            TestFiles("box1.obj", "box2.obj", MeshBoolean.boolOperation.Union);
         }
 
         internal static void test_subtraction()
         {
-            Console.WriteLine("Testing boolean subtraction.");
-            DMesh3 b1 = TestUtil.LoadTestInputMesh("box1.obj");
-            DMesh3 b2 = TestUtil.LoadTestInputMesh("box2.obj");
-            var pOut = Path.ChangeExtension(Path.GetTempFileName(), "obj");
-
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            var mBool = new MeshBoolean();
-            mBool.Target = b1;
-            mBool.Tool = b2;
-            mBool.Compute(MeshBoolean.boolOperation.Subtraction);
-
-            PlanarRemesher p = new PlanarRemesher(mBool.Result);
-            p.Remesh();
-
-            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
-            IOWriteResult result = StandardMeshWriter.WriteFile(pOut, new List<WriteMesh>() { new WriteMesh(mBool.Result) }, WriteOptions.Defaults);
-            Console.WriteLine($"{result.message } file: {pOut}");
+            TestFiles("box1.obj", "box2.obj", MeshBoolean.boolOperation.Subtraction);
+        }
+        internal static void test_subtraction2()
+        {
+            TestFiles("box1.obj", "boxThinTall.obj", MeshBoolean.boolOperation.Subtraction);
         }
 
         internal static void test_intersection()
         {
-            Console.WriteLine("Testing boolean intersection.");
-            DMesh3 b1 = TestUtil.LoadTestInputMesh("box1.obj");
-            DMesh3 b2 = TestUtil.LoadTestInputMesh("box2.obj");
-            var pOut = Path.ChangeExtension(Path.GetTempFileName(), "obj");
-
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            var mBool = new MeshBoolean();
-            mBool.Target = b1;
-            mBool.Tool = b2;
-            mBool.Compute(MeshBoolean.boolOperation.Intersection);
-
-            PlanarRemesher p = new PlanarRemesher(mBool.Result);
-            p.Remesh();
-
-            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
-            IOWriteResult result = StandardMeshWriter.WriteFile(pOut, new List<WriteMesh>() { new WriteMesh(mBool.Result) }, WriteOptions.Defaults);
-            Console.WriteLine($"{result.message } file: {pOut}");
+            TestFiles("box1.obj", "box2.obj", MeshBoolean.boolOperation.Intersection);
         }
     }
 }
