@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace geometry3Test
 {
@@ -31,10 +32,18 @@ namespace geometry3Test
             mBool.Compute(op);
             PlanarRemesher p = new PlanarRemesher(mBool.Result);
             p.Remesh();
-
-            MeshRepairOrientation rep = new MeshRepairOrientation(mBool.Result);
-            rep.OrientComponents();
-            rep.SolveGlobalOrientation();
+            if (false)
+            {
+                MeshRepairOrientation rep = new MeshRepairOrientation(mBool.Result);
+                rep.OrientComponents();
+                rep.SolveGlobalOrientation();
+                
+            }
+            if (false)
+            {
+                MeshAutoRepair autoRepair = new MeshAutoRepair(mBool.Result);
+                autoRepair.Apply();
+            }
             
             return mBool.Result;
         }
