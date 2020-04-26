@@ -24,20 +24,21 @@ namespace geometry3Test
 #if DEBUG
             Util.DebugBreakOnDevAssert = true;
 #endif
+            // test_MeshOps.test_MeshAutoRepair();
+            // test_PlanarRemesher.Test_remesh();
             test_Bool.test_subtraction2();
-            Console.ReadKey();
+            Console.WriteLine("Press key to exit"); Console.ReadKey();
             return;
 
             test_Bool.test_subtraction();
             test_Bool.test_intersection();
             test_Bool.test_union();
 
-            test_PlanarRemesher.Test_remesh();
+            
             test_MeshOps.test_cut_external();
             test_MeshOps.test_cut_contained();
             test_MeshGen.test_mesh_builder_104();
 
-            Console.ReadKey();
             return;
 
 

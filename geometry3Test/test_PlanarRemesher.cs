@@ -13,21 +13,29 @@ namespace geometry3Test
         internal static void Test_remesh()
         {
             Console.WriteLine("Testing planar remesh.");
-            var files = new List<string>();
-
-            // files.Add("planarRemesher_face.obj");
-            // files.Add("planarRemesher_partial.obj");
-            files.Add("planarRemesher_3d.obj");
-                        
-            foreach (var file in files)
+            var tests = new[]
             {
-                DMesh3 b1 = TestUtil.LoadTestInputMesh(file);
-                var pOut = Path.Combine(Path.GetTempPath(), file);
+                (file: "planarRemesher_face.obj", count: 3),
+                (file: "planarRemesher_partial.obj", count: 4),
+                (file: "planarRemesher_3d.obj", count: 12)
+            };
+
+                        
+            foreach (var test in tests)
+            {
+                DMesh3 b1 = TestUtil.LoadTestInputMesh(test.file);
+                var pOut = Path.Combine(Path.GetTempPath(), test.file);
                 PlanarRemesher planarRemesher = new PlanarRemesher(b1);
                 planarRemesher.Remesh();
-
-                IOWriteResult result = StandardMeshWriter.WriteFile(pOut, new List<WriteMesh>() { new WriteMesh(b1) }, WriteOptions.Defaults);
-                Console.WriteLine($"{result.message}, {result.code} file: {pOut}");
+                if (test.count != -1)
+                {
+                    if (test.count != b1.VertexCount)
+                    {
+                        IOWriteResult result = StandardMeshWriter.WriteFile(pOut, new List<WriteMesh>() { new WriteMesh(b1) }, WriteOptions.Defaults);
+                        Console.WriteLine($"{result.message}, {result.code} file: {pOut}");
+                        throw new Exception("Incorrect vertex count.");
+                    }
+                }               
             }            
         }
     }
