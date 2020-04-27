@@ -34,6 +34,10 @@ namespace geometry3Test
             PlanarRemesher p = new PlanarRemesher(mBool.Result);
             p.Remesh();
 
+
+            var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
+
+
             // todo: this first call leaves the mesh with 17 vertices instead that the 16 possible minimum
             MergeCoincidentEdges mrg = new MergeCoincidentEdges(mBool.Result);
             mrg.Apply();

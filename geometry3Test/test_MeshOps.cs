@@ -12,6 +12,9 @@ namespace geometry3Test
 {
     class test_MeshOps
     {
+
+
+
         internal static void test_cut_contained()
         {
             Console.WriteLine("Testing boolean union.");
@@ -37,7 +40,7 @@ namespace geometry3Test
             // I guess autorepair should weld it back
 
             DMesh3 b1 = TestUtil.LoadTestInputMesh("NeedHealing.obj");
-            
+
             // b2 is the same mesh, but we weld it 
             var b2 = new DMesh3(b1, true);
             MergeCoincidentEdges merg = new MergeCoincidentEdges(b2);
@@ -80,6 +83,33 @@ namespace geometry3Test
             Console.WriteLine($"Written to: {outF}");
         }
 
+        internal static void test_MergeCoincidentEdges()
+        {
+            var tests = new[]
+            {
+                (file: "box1_NeedHealing.obj", count: 8), // this works with a simple apply
+                (file: "NeedHealing.obj", count: 16)      // this works with Apply Iteratively
+            };
 
+            Console.WriteLine("test_MergeCoincidentEdges...");
+
+            foreach (var test in tests)
+            {
+                Console.Write($" - {test.file}... ");
+                DMesh3 b1 = TestUtil.LoadTestInputMesh(test.file);
+                MergeCoincidentEdges merg = new MergeCoincidentEdges(b1);
+                merg.ApplyIteratively();
+                if (b1.VertexCount != test.count)
+                {
+                    var outF = TestUtil.WriteTestOutputMesh(b1, "MeshOps_MergeCoincidentEdges.obj");
+                    Console.WriteLine($"Error, shape written to: {outF}");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ok");
+                }
+            }
+        }
     }
 }
