@@ -89,9 +89,35 @@ namespace geometry3Test
 			}
 		}
 
+        /// <summary>
+        /// Created to look into https://github.com/gradientspace/geometry3Sharp/issues/11
+        /// </summary>
+        internal static void test_Normalize()
+        {
+            Console.WriteLine("Testing normalization.");
+            TestNormalisation(new Vector3d(-0.712443, 0.1036605, -0.6940313));
+            TestNormalisation(new Vector3d(-.90034962, .37379742, -.22281371));
+            TestNormalisation(new Vector3d(0.0000000000000001, 0, 0));
+        }
 
-		// compare vector-cot and vector-tan to regular cot/tan
-		public static void test_VectorTanCot() {
+        private static void TestNormalisation(Vector3d v)
+        {
+            Console.WriteLine($"Initial vector; {v} IsNormalized: {v.IsNormalized}");
+            var retval = v.Normalize();
+            Console.WriteLine($"  Normalization return value; {retval}");
+            if (retval != 0 && retval != 1)
+                throw new Exception("Normalization failure.");
+            Console.WriteLine($"  After normalization; {v} IsNormalized: {v.IsNormalized}");
+            if (retval != 0)
+            {
+                if (!v.IsNormalized)
+                    throw new Exception("Normalization failure.");
+            }
+        }
+
+
+        // compare vector-cot and vector-tan to regular cot/tan
+        public static void test_VectorTanCot() {
 
 			Vector3d a = Vector3d.AxisX;
 
