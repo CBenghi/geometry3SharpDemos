@@ -542,9 +542,9 @@ namespace geometry3Test
             ImplicitBox3d box = new ImplicitBox3d() {
                 Box = new Box3d(new Frame3f(Vector3f.AxisX), 0.5 * Vector3d.One)
             };
-            generateMeshF(new ImplicitUnion3d() { A = sphere, B = box }, 128, "c:\\demo\\union.obj");
-            generateMeshF(new ImplicitDifference3d() { A = sphere, B = box }, 128, "c:\\demo\\difference.obj");
-            generateMeshF(new ImplicitIntersection3d() { A = sphere, B = box }, 128, "c:\\demo\\intersection.obj");
+            generateMeshF(new ImplicitUnion3d() { A = sphere, B = box }, 128, Path.Combine(Program.TEST_OUTPUT_PATH, "union.obj"));
+            generateMeshF(new ImplicitDifference3d() { A = sphere, B = box }, 128, Path.Combine(Program.TEST_OUTPUT_PATH, "difference.obj"));
+            generateMeshF(new ImplicitIntersection3d() { A = sphere, B = box }, 128, Path.Combine(Program.TEST_OUTPUT_PATH, "intersection.obj"));
 
 
             // generate bunny offset surfaces

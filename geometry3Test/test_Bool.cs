@@ -31,25 +31,21 @@ namespace geometry3Test
             mBool.Target = b1;
             mBool.Tool = b2;
             mBool.Compute(op);
+            var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
             PlanarRemesher p = new PlanarRemesher(mBool.Result);
             p.Remesh();
 
 
-            var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
+            // var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
 
 
             // todo: this first call leaves the mesh with 17 vertices instead that the 16 possible minimum
             MergeCoincidentEdges mrg = new MergeCoincidentEdges(mBool.Result);
-            mrg.Apply();
+            mrg.ApplyIteratively();
 
             MeshRepairOrientation rep = new MeshRepairOrientation(mBool.Result);
             rep.OrientComponents();
             rep.SolveGlobalOrientation();
-
-
-            // todo: this second call increases the number of vertices to 18... we need to identify issues in the MergeCoincidentEdges class
-            MergeCoincidentEdges mrg2 = new MergeCoincidentEdges(mBool.Result);
-            mrg2.Apply();
 
             Util.DebugEdgeInfoFromVertex(mBool.Result, 0.5, -0.4, 0.5);
 

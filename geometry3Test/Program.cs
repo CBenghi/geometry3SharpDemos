@@ -24,17 +24,19 @@ namespace geometry3Test
 #if DEBUG
             Util.DebugBreakOnDevAssert = true;
 #endif
-            // test_MeshOps.test_MeshAutoRepair();
-            // test_PlanarRemesher.Test_remesh();
-            // test_Bool.test_subtraction2();
-            // test_MeshOps.test_MergeCoincidentEdges();
-            test_Math.test_Normalize();
+            // currently debugging this:
+            test_Bool.test_subtraction2();
 
-            test_MeshGen.test_TriangulatedPolygonGenerator_114();
-            Console.WriteLine("Press key to exit"); Console.ReadKey();
+#if DEBUG
+            Console.WriteLine("Press Enter key to exit"); Console.ReadLine();
             return;
-
-            test_Bool.test_subtraction();
+#endif
+            test_MeshOps.test_MeshAutoRepair();
+            test_PlanarRemesher.Test_remesh();
+            test_Bool.test_subtraction2();
+            test_MeshOps.test_MergeCoincidentEdges();
+            test_MeshGen.test_TriangulatedPolygonGenerator_114();
+            
             test_Bool.test_intersection();
             test_Bool.test_union();
 
@@ -43,14 +45,13 @@ namespace geometry3Test
             test_MeshOps.test_cut_contained();
             test_MeshGen.test_mesh_builder_104();
 
-            return;
-
 
             test_VectorTypes.test_rcvector();
             test_VectorTypes.test_bitarrays();
             test_Math.test_VectorTanCot();
             test_Math.test_AngleClamp();
             test_Math.test_RayBoxIntersect();
+            test_Math.test_Normalize();
             // test_MathTypes.all_tests();
 
             test_MeshIO.test_simple_obj();
