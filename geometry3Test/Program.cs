@@ -27,7 +27,8 @@ namespace geometry3Test
             // test_MeshOps.test_MeshAutoRepair();
             // test_PlanarRemesher.Test_remesh();
             // test_Bool.test_subtraction2();
-            test_MeshOps.test_MergeCoincidentEdges();
+            // test_MeshOps.test_MergeCoincidentEdges();
+            test_MeshGen.test_TriangulatedPolygonGenerator_114();
             Console.WriteLine("Press key to exit"); Console.ReadKey();
             return;
 

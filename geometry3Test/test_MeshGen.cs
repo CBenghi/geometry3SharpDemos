@@ -72,8 +72,33 @@ namespace geometry3Test
             WriteGeneratedMesh(tube_gen, "meshgen_TubeGenerator_shifted.obj");
         }
 
+        /// <summary>
+        /// test added to demonstrate https://github.com/gradientspace/geometry3Sharp/issues/114
+        /// </summary>
+        public static void test_TriangulatedPolygonGenerator_114()
+        {
+            Console.WriteLine("Testing TriangulatedPolygonGenerator");
+            TriangulatedPolygonGenerator tg = new TriangulatedPolygonGenerator();
+            tg.Polygon = new GeneralPolygon2d(new Polygon2d(
+                new List<Vector2d>()
+                {
+                    new Vector2d(0,0),
+                    new Vector2d(0,4),
+                    new Vector2d(5,4),
+                    new Vector2d(5,0)
+                }
+                ));
+            tg.Polygon.AddHole(new Polygon2d(
+                new List<Vector2d>()
+                {
+                    new Vector2d(1,1),
+                    new Vector2d(2,1),
+                    new Vector2d(1,2)
+                }
+                ));
+            WriteGeneratedMesh(tg, "TriangulatedPolygonGenerator.obj");
 
-
+        }
 
 
         public static void test_tube_generator()
