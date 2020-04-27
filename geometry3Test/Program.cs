@@ -25,7 +25,7 @@ namespace geometry3Test
             Util.DebugBreakOnDevAssert = true;
 #endif
             // currently debugging this:
-            test_Bool.test_subtraction2();
+            test_Bool.test_all();
 
 #if DEBUG
             Console.WriteLine("Press Enter key to exit"); Console.ReadLine();
@@ -33,13 +33,11 @@ namespace geometry3Test
 #endif
             test_MeshOps.test_MeshAutoRepair();
             test_PlanarRemesher.Test_remesh();
-            test_Bool.test_subtraction2();
+            
             test_MeshOps.test_MergeCoincidentEdges();
             test_MeshGen.test_TriangulatedPolygonGenerator_114();
             
-            test_Bool.test_intersection();
-            test_Bool.test_union();
-
+            
             
             test_MeshOps.test_cut_external();
             test_MeshOps.test_cut_contained();

@@ -20,7 +20,14 @@ namespace geometry3Test
             s.Start();
             var ret = PerformBoolean(b1, b2, op);
             s.Stop();
-            var outF = TestUtil.WriteTestOutputMesh(ret, $"Bool_{op}.obj");
+            if (!ret.IsClosed())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error: Mesh is not closed.");
+                Console.ResetColor();
+            }
+            var outName = $"Bool{op}_{file1}_{file2}".Replace(".obj", "");
+            var outF = TestUtil.WriteTestOutputMesh(ret, outName + ".obj");
             Console.WriteLine($"Model: {outF} in {s.ElapsedMilliseconds} ms.");
             return ret;
         }
@@ -31,15 +38,10 @@ namespace geometry3Test
             mBool.Target = b1;
             mBool.Tool = b2;
             mBool.Compute(op);
-            var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
+            
             PlanarRemesher p = new PlanarRemesher(mBool.Result);
             p.Remesh();
 
-
-            // var outF = TestUtil.WriteTestOutputMesh(mBool.Result, $"Bool_{op}.obj");
-
-
-            // todo: this first call leaves the mesh with 17 vertices instead that the 16 possible minimum
             MergeCoincidentEdges mrg = new MergeCoincidentEdges(mBool.Result);
             mrg.ApplyIteratively();
 
@@ -47,9 +49,15 @@ namespace geometry3Test
             rep.OrientComponents();
             rep.SolveGlobalOrientation();
 
-            Util.DebugEdgeInfoFromVertex(mBool.Result, 0.5, -0.4, 0.5);
-
             return mBool.Result;
+        }
+
+        internal static void test_all()
+        {
+            test_union();
+            test_subtraction();
+            test_subtraction2();
+            test_intersection();
         }
 
         internal static void test_union()
