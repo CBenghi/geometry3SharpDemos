@@ -81,7 +81,6 @@ namespace geometry3Test
                 center: new Vector3d(1.5, 1.5, 0),
                 size: new Vector3d(.5, .5, .5)
                 ));
-
             cuts.Add(MakeBox(
                 center: new Vector3d(-1.5, -1.5, 0),
                 size: new Vector3d(.5, .5, .5)
@@ -98,15 +97,26 @@ namespace geometry3Test
             foreach (var anotherHole in cuts)
             {
                 ret = ComputeBoolean(ret, anotherHole, MeshBoolean.boolOperation.Subtraction, true);
+                if (ret == null)
+                    break;
             }
 
-
-            var outF = TestUtil.WriteTestOutputMesh(ret, "programmatic.obj");
+            if (ret != null)
+            {
+                var outF = TestUtil.WriteTestOutputMesh(ret, "programmatic.obj");
+            }
             // outF = TestUtil.WriteTestOutputMesh(anotherHole, "h.obj");
         }
 
         private static DMesh3 ComputeBoolean(DMesh3 outer, DMesh3 hole, MeshBoolean.boolOperation op, bool full = true)
         {
+            if (!outer.IsClosed() || !hole.IsClosed())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid operand.");
+                Console.ResetColor(); 
+                return null;
+            }
             var mBool = new MeshBoolean();
             mBool.Target = outer;
             mBool.Tool = hole;
