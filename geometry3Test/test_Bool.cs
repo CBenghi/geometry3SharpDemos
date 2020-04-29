@@ -54,16 +54,35 @@ namespace geometry3Test
 
         internal static void test_all()
         {
-            test_programmatic();
+            test_coplanar();
             return;
-
+            test_multiple();
             test_union();
             test_subtraction();
             test_subtraction2();
             test_intersection();
         }
 
-        private static void test_programmatic()
+        internal static void test_coplanar()
+        {
+            var outer = MakeBox(
+                 center: new Vector3d(0, 0, 0),
+                 size: new Vector3d(1, 1, 1)
+                 );
+            var hole = MakeBox(
+                center: new Vector3d(0, 0, .5),
+                size: new Vector3d(1, 1, 1)
+                );
+            DMesh3 ret = ComputeBoolean(outer, hole, MeshBoolean.boolOperation.Subtraction, true);
+            
+            if (ret != null || !ret.IsClosed())
+            {
+                var outF = TestUtil.WriteTestOutputMesh(ret, "programmatic.obj");
+                TestUtil.ConsoleError($"Error in boolean: test_coplanar: {outF}");
+            }
+        }
+
+        private static void test_multiple()
         {
             var outer = MakeBox(
                 center: new Vector3d(0, 0, 0),
@@ -138,7 +157,7 @@ namespace geometry3Test
             return ret;
         }
 
-        private static DMesh3 MakeBox(Vector3d center, Vector3d size)
+        internal static DMesh3 MakeBox(Vector3d center, Vector3d size)
         {
             TrivialBox3Generator boxgen = new TrivialBox3Generator();
             boxgen.WantNormals = false;

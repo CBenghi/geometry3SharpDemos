@@ -13,11 +13,35 @@ namespace geometry3Test
     class test_MeshOps
     {
 
+        internal static void test_cut_coplanar()
+        {
+            Console.WriteLine("Testing cut coplanar.");
+            var b1= test_Bool.MakeBox(
+                center: new Vector3d(0, 0, 0),
+                size: new Vector3d(1, 1, 1)
+                );
+            var b2 = test_Bool.MakeBox(
+                center: new Vector3d(0, 0, .5),
+                size: new Vector3d(1.0, 1.0, 1)
+                );
+
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            var meshCut = new MeshMeshCut();
+            meshCut.Target = b1;
+            meshCut.CutMesh = b2;
+            meshCut.Compute();
+            meshCut.RemoveContained();
+            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
+            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "MeshOps_CutCoplanar.obj");
+            Console.WriteLine($"Written to: {outF}");
+        }
+
 
 
         internal static void test_cut_contained()
         {
-            Console.WriteLine("Testing boolean union.");
+            Console.WriteLine("Testing cut Contained.");
             DMesh3 b1 = TestUtil.LoadTestInputMesh("box1.obj");
             DMesh3 b2 = TestUtil.LoadTestInputMesh("box2.obj");
 
@@ -66,7 +90,7 @@ namespace geometry3Test
 
         internal static void test_cut_external()
         {
-            Console.WriteLine("Testing boolean union.");
+            Console.WriteLine("Testing cut external.");
             DMesh3 b1 = TestUtil.LoadTestInputMesh("box1.obj");
             DMesh3 b2 = TestUtil.LoadTestInputMesh("box2.obj");
 

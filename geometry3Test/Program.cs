@@ -25,7 +25,8 @@ namespace geometry3Test
             Util.DebugBreakOnDevAssert = true;
 #endif
             // currently debugging this:
-            test_Bool.test_all();
+            test_MeshOps.test_cut_coplanar();
+            // test_Bool.test_all();
 
 #if DEBUG
             Console.WriteLine("Press Enter key to exit"); Console.ReadLine();

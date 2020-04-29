@@ -81,6 +81,13 @@ namespace geometry3Test
             svg.Write(Program.TEST_OUTPUT_PATH + sFilename);
         }
 
+        internal static void ConsoleError(string errorMessage)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(errorMessage);
+            Console.ResetColor();
+        }
+
         public static void WriteTestOutputStrings(string[] lines, string sFilename)
         {
             File.WriteAllLines(Program.TEST_OUTPUT_PATH + sFilename, lines);
