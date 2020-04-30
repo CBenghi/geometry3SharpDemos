@@ -25,7 +25,8 @@ namespace geometry3Test
             Util.DebugBreakOnDevAssert = true;
 #endif
             // currently debugging this:
-            test_MeshOps.test_cut_coplanar();
+            test_MeshOps.test_cut_forStudy();
+            // test_MeshOps.test_cut_coplanar();
             // test_Bool.test_all();
 
 #if DEBUG

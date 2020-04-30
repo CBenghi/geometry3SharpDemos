@@ -13,6 +13,25 @@ namespace geometry3Test
     class test_MeshOps
     {
 
+        internal static void test_cut_forStudy()
+        {
+            Console.WriteLine("Testing cut coplanar.");
+            DMesh3 b1 = TestUtil.LoadTestInputMesh("Tri1.obj");
+            DMesh3 b2 = TestUtil.LoadTestInputMesh("Tri2.obj");
+
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            var meshCut = new MeshMeshCut();
+            meshCut.Target = b1;
+            meshCut.CutMesh = b2;
+            meshCut.Compute();
+            meshCut.RemoveContained();
+            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
+            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "MeshOps_CutForStudy.obj");
+            Console.WriteLine($"Written to: {outF}");
+        }
+
+
         internal static void test_cut_coplanar()
         {
             Console.WriteLine("Testing cut coplanar.");

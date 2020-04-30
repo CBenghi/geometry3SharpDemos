@@ -41,3 +41,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 #Nuget packages folder
 packages/
+!geometry3Test/test_files/*.obj
