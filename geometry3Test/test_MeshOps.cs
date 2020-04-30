@@ -47,6 +47,7 @@ namespace geometry3Test
             Stopwatch s = new Stopwatch();
             s.Start();
             var meshCut = new MeshMeshCut();
+            meshCut.AttemptPlanarRemoval = true;
             meshCut.Target = b1;
             meshCut.CutMesh = b2;
             meshCut.Compute();

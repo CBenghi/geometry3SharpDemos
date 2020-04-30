@@ -55,7 +55,6 @@ namespace geometry3Test
         internal static void test_all()
         {
             test_coplanar();
-            return;
             test_multiple();
             test_union();
             test_subtraction();
