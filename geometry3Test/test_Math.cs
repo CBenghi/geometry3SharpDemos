@@ -170,6 +170,28 @@ namespace geometry3Test
         }
 
 
+        /// https://github.com/gradientspace/geometry3Sharp/issues/137
+        // [TestMethod]
+        public static void test_Issue_137()
+        {
+            Console.WriteLine("test_Issue_137");
+            Segment2d s1 = new Segment2d(
+                new Vector2d(56.6598662, 34.32530824),
+                new Vector2d(58.18386662, 35.87470824));
+
+            Segment2d s2 = new Segment2d(
+                            new Vector2d(58.05, 34.1964),
+                            new Vector2d(58.05, 34.1964));
+
+            bool intersect = s1.Intersects(s2);
+            if (intersect)
+            {
+                TestUtil.ConsoleError("Segment2d should not intersect.");
+            }
+            Console.WriteLine();
+        }
+
+
         // [RMS] this only tests some basic cases...
         public static void test_RayBoxIntersect()
         {

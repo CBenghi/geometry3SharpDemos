@@ -8,6 +8,7 @@ namespace geometry3Test
 {
 	public static class TestUtil 
 	{
+       
 		public static string WRITE_PATH {
             get {
                 if (Util.IsRunningOnMono())
@@ -81,11 +82,19 @@ namespace geometry3Test
             svg.Write(Program.TEST_OUTPUT_PATH + sFilename);
         }
 
+        /// <summary>
+        /// If this is set to true then the 
+        /// </summary>
+        public static bool isInteractive { get; set; } = false;
+
+
         internal static void ConsoleError(string errorMessage)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(errorMessage);
             Console.ResetColor();
+            if (!isInteractive)
+                throw new Exception("Test not passed.");
         }
 
         public static void WriteTestOutputStrings(string[] lines, string sFilename)

@@ -24,10 +24,12 @@ namespace geometry3Test
 #if DEBUG
             Util.DebugBreakOnDevAssert = true;
 #endif
+            TestUtil.isInteractive = true;
             // currently debugging this:
             // test_MeshOps.test_cut_forStudy();
-            test_MeshOps.test_cut_coplanar();
-            test_Bool.test_all();
+            test_Math.test_Issue_137();
+            // test_MeshOps.test_cut_coplanar();
+            // test_Bool.test_all();
 
 #if DEBUG
             Console.WriteLine("Press Enter key to exit"); Console.ReadLine();
@@ -50,6 +52,7 @@ namespace geometry3Test
             test_VectorTypes.test_bitarrays();
             test_Math.test_VectorTanCot();
             test_Math.test_AngleClamp();
+            
             test_Math.test_RayBoxIntersect();
             test_Math.test_Normalize();
             // test_MathTypes.all_tests();
