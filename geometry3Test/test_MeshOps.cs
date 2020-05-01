@@ -35,7 +35,13 @@ namespace geometry3Test
         internal static void test_cut_coplanar()
         {
             Console.WriteLine("Testing cut coplanar.");
-            var b1= test_Bool.MakeBox(
+            testCoplanar(false, "MeshOps_CutCoplanarB1B2.obj");
+            testCoplanar(true, "MeshOps_CutCoplanarB2B1.obj");
+        }
+
+        private static void testCoplanar(bool invert, string outFileName)
+        {
+            var b1 = test_Bool.MakeBox(
                 center: new Vector3d(0, 0, 0),
                 size: new Vector3d(1, 1, 1)
                 );
@@ -48,16 +54,25 @@ namespace geometry3Test
             s.Start();
             var meshCut = new MeshMeshCut();
             meshCut.AttemptPlanarRemoval = true;
-            meshCut.Target = b1;
-            meshCut.CutMesh = b2;
+
+            if (invert)
+            {
+                meshCut.Target = b2;
+                meshCut.CutMesh = b1;
+            }
+            else
+            {
+                meshCut.Target = b1;
+                meshCut.CutMesh = b2;
+            }
+
+
             meshCut.Compute();
             meshCut.RemoveContained();
             Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
-            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "MeshOps_CutCoplanar.obj");
+            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, outFileName);
             Console.WriteLine($"Written to: {outF}");
         }
-
-
 
         internal static void test_cut_contained()
         {

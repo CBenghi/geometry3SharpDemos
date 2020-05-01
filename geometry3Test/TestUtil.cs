@@ -30,7 +30,7 @@ namespace geometry3Test
 
             var fileName = Program.TEST_OUTPUT_PATH + sFilename;
             FileInfo f = new FileInfo(fileName);
-            var s = new System.IO.StreamWriter(fileName, false);
+            var s = new StreamWriter(fileName, false);
             writer.Write(s, new List<WriteMesh> { new WriteMesh(mesh) }, 
                 new WriteOptions() { bPerVertexNormals = true, bWriteGroups = write_groups, bPerVertexColors = write_vtxcolors, bPerVertexUVs = write_vtxuv } );
 			s.Close();
@@ -39,7 +39,7 @@ namespace geometry3Test
         public static void WriteTestOutputMeshes(List<IMesh> meshes, string sFilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
             OBJWriter writer = new OBJWriter();
-            var s = new System.IO.StreamWriter(Program.TEST_OUTPUT_PATH + sFilename, false);
+            var s = new StreamWriter(Program.TEST_OUTPUT_PATH + sFilename, false);
             List<WriteMesh> wm = new List<WriteMesh>();
             foreach (var m in meshes)
                 wm.Add(new WriteMesh(m));
@@ -96,7 +96,7 @@ namespace geometry3Test
         public static void WriteDebugMesh(IMesh mesh, string sfilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
             OBJWriter writer = new OBJWriter();
-            var s = new System.IO.StreamWriter(WRITE_PATH + sfilename, false);
+            var s = new StreamWriter(WRITE_PATH + sfilename, false);
 			List<WriteMesh> meshes = new List<WriteMesh>() { new WriteMesh(mesh) };
             writer.Write(s, meshes, new WriteOptions() { bWriteGroups = write_groups, bPerVertexColors = write_vtxcolors, bPerVertexUVs = write_vtxuv } );
 			s.Close();
@@ -105,7 +105,7 @@ namespace geometry3Test
         public static void WriteDebugMeshes(List<IMesh> meshes, string sfilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
             OBJWriter writer = new OBJWriter();
-            var s = new System.IO.StreamWriter(WRITE_PATH + sfilename, false);
+            var s = new StreamWriter(WRITE_PATH + sfilename, false);
             List<WriteMesh> wm = new List<WriteMesh>();
             foreach (var m in meshes)
                 wm.Add(new WriteMesh(m));
