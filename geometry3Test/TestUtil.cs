@@ -9,7 +9,6 @@ namespace geometry3Test
 {
 	public static class TestUtil 
 	{
-       
 		public static string WRITE_PATH {
             get {
                 if (Util.IsRunningOnMono())
@@ -24,15 +23,29 @@ namespace geometry3Test
 			return Path.Combine(Program.TEST_OUTPUT_PATH + filename);
 		}
 
+        public static int progressiveFileId = 1;
+
         public static string WriteTestOutputMesh(IMesh mesh, string sFilename = "", bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
             if (string.IsNullOrWhiteSpace(sFilename))
             {
                 StackTrace stackTrace = new StackTrace();
-                sFilename = stackTrace.GetFrame(1).GetMethod().Name + ".obj";
+                var name = stackTrace.GetFrame(1).GetMethod().Name;
+                int i = 2;
+                while (i < stackTrace.FrameCount)
+                {
+                    var t = stackTrace.GetFrame(i).GetMethod().Name;
+                    if (t.StartsWith("test_"))
+                    {
+                        name = t;
+                        break;
+                    }
+                    i++;
+                }
+                sFilename = name + ".obj";
             }
             OBJWriter writer = new OBJWriter();
-
+            sFilename = $"{progressiveFileId++}_{sFilename}";
             var fileName = Program.TEST_OUTPUT_PATH + sFilename;
             FileInfo f = new FileInfo(fileName);
             var s = new StreamWriter(fileName, false);

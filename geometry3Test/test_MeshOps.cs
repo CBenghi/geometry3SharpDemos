@@ -33,24 +33,44 @@ namespace geometry3Test
             return DMesh3Builder.Build(vertices, triangles);
         }
 
-        internal static void test_cut_tri_overlap()
+        internal static void test_cut_overlap_tetra()
         {
-            Vector3d p0 = new Vector3d(0, 0, 0);
-            var Tri0 = MakeTetra(p0, 2);
-            Vector3d p1 = new Vector3d(0, 0, 1);
-            var Tri1 = MakeTetra(p1, 2);
+            Console.WriteLine($"Testing test_cut_overlap_tetra()");
+            var tetra0 = MakeTetra(new Vector3d(0, 0, 0), 2);
+            var tetra1 = MakeTetra(new Vector3d(0, 0, 1), 2);
 
             Stopwatch s = new Stopwatch();
             s.Start();
             var meshCut = new MeshMeshCut();
-            meshCut.Target = Tri0;
-            meshCut.CutMesh = Tri1;
+            meshCut.Target = tetra0;
+            meshCut.CutMesh = tetra1;
             meshCut.Compute();
+            var remove = meshCut.GetIntersectionSet(MeshMeshCut.IntersectionSets.InternalPlusShared);
+            if (remove.Count() != 3)
+            {
+                // should be 4, 6, 7
+                TestUtil.ConsoleError("unexpected number of triangles to remove.");
+                return;
+            }
+
+            tetra0 = MakeTetra(new Vector3d(0, 0, 0), 2);
+            tetra1 = MakeTetra(new Vector3d(0, 0, 1), 2);
+            meshCut = new MeshMeshCut();
+            meshCut.Target = tetra1;  // inverse assignment
+            meshCut.CutMesh = tetra0;
+            meshCut.Compute();
+            // remove = meshCut.GetIntersectionSet(MeshMeshCut.IntersectionSets.ExternalPlusShared);
+            remove = meshCut.Remove(MeshMeshCut.IntersectionSets.ExternalPlusShared);
+            if (remove.Count() != 9)
+            {
+                // should be all except id 2
+                TestUtil.ConsoleError("unexpected number of triangles to remove.");
+                return;
+            }
+
             Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
-            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "test_cut_tri_overlap.obj");
-            Console.WriteLine($"Written to: {outF}");
-
-
+            // var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "test_cut_overlap_tetra.obj");
+            // Console.WriteLine($"Written to: {outF}");
         }
 
         internal static void test_cut_forStudy()

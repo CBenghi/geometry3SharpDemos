@@ -16,45 +16,16 @@ namespace geometry3Test
             Console.WriteLine($"Testing {op} on : {file1}, {file2}");
             DMesh3 b1 = TestUtil.LoadTestInputMesh(file1);
             DMesh3 b2 = TestUtil.LoadTestInputMesh(file2);
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            var ret = PerformBoolean(b1, b2, op);
-            s.Stop();
-            if (!ret.IsClosed())
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error: Mesh is not closed.");
-                Console.ResetColor();
-            }
-            var outName = $"Bool{op}_{file1}_{file2}".Replace(".obj", "");
-            var outF = TestUtil.WriteTestOutputMesh(ret, outName + ".obj");
-            Console.WriteLine($"Model: {outF} in {s.ElapsedMilliseconds} ms.");
+            var ret = ComputeBoolean(b1, b2, op, true);
+            IsNotNullAndClosed(ret);
             return ret;
         }
 
-        private static DMesh3 PerformBoolean(DMesh3 b1, DMesh3 b2, MeshBoolean.boolOperation op)
-        {
-            var mBool = new MeshBoolean();
-            mBool.Target = b1;
-            mBool.Tool = b2;
-            mBool.Compute(op);
-            
-            PlanarRemesher p = new PlanarRemesher(mBool.Result);
-            p.Remesh();
-
-            MergeCoincidentEdges mrg = new MergeCoincidentEdges(mBool.Result);
-            mrg.ApplyIteratively();
-
-            MeshRepairOrientation rep = new MeshRepairOrientation(mBool.Result);
-            rep.OrientComponents();
-            rep.SolveGlobalOrientation();
-
-            return mBool.Result;
-        }
 
         internal static void test_all()
         {
-            test_coplanar();
+            test_coplanar_tetra();
+            test_coplanar_box();
             test_multiple();
             test_union();
             test_subtraction();
@@ -62,7 +33,54 @@ namespace geometry3Test
             test_intersection();
         }
 
-        internal static void test_coplanar()
+        internal static void test_coplanar_tetra()
+        {
+            Console.WriteLine("Testing: test_coplanar_tetra");
+            
+            var shape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 0), 2);
+            var toolShape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 1), 2);
+            DMesh3 ret = ComputeBoolean(shape, toolShape, MeshBoolean.boolOperation.Subtraction, true);
+            IsNotNullAndClosed(ret);
+
+            // reset and try other operation
+            shape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 0), 2);
+            toolShape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 1), 2);
+            ret = ComputeBoolean(shape, toolShape, MeshBoolean.boolOperation.Intersection, true);
+            IsNotNullAndClosed(ret);
+
+            // reset and try other operation
+            shape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 0), 2);
+            toolShape = test_MeshOps.MakeTetra(new Vector3d(0, 0, 1), 2);
+            ret = ComputeBoolean(shape, toolShape, MeshBoolean.boolOperation.Union, true);
+            IsNotNullAndClosed(ret);
+
+            Console.WriteLine("Done");
+        }
+
+        static bool SaveSuccessfulBooleanTests = true;
+
+        private static bool IsNotNullAndClosed(DMesh3 ret)
+        {
+            if (ret == null)
+            {
+                TestUtil.ConsoleError($"Null return from test.");
+                return false;
+            }
+            if (!ret.IsClosed())
+            {
+                var outF = TestUtil.WriteTestOutputMesh(ret);
+                TestUtil.ConsoleError($"Error in boolean: test_coplanar_tetra: {outF}");
+                return false;
+            }
+            if (SaveSuccessfulBooleanTests)
+            {
+                var outF = TestUtil.WriteTestOutputMesh(ret);
+                Console.WriteLine($"Ok: {outF}");
+            }
+            return true;
+        }
+
+        internal static void test_coplanar_box()
         {
             var outer = MakeBox(
                  center: new Vector3d(0, 0, 0),
@@ -73,14 +91,7 @@ namespace geometry3Test
                 size: new Vector3d(1, 1, 1)
                 );
             DMesh3 ret = ComputeBoolean(outer, hole, MeshBoolean.boolOperation.Subtraction, true);
-            
-            if (ret == null)
-                TestUtil.ConsoleError($"Null return from boolean: test_coplanar.");
-            if (ret != null || !ret.IsClosed())
-            {
-                var outF = TestUtil.WriteTestOutputMesh(ret);
-                TestUtil.ConsoleError($"Error in boolean: test_coplanar: {outF}");
-            }
+            IsNotNullAndClosed(ret);
         }
 
         public static void test_multiple()
@@ -117,15 +128,9 @@ namespace geometry3Test
             foreach (var anotherHole in cuts)
             {
                 ret = ComputeBoolean(ret, anotherHole, MeshBoolean.boolOperation.Subtraction, true);
-                if (ret == null)
+                if (!IsNotNullAndClosed(ret))
                     break;
             }
-
-            if (ret != null)
-            {
-                var outF = TestUtil.WriteTestOutputMesh(ret, "programmatic.obj");
-            }
-            // outF = TestUtil.WriteTestOutputMesh(anotherHole, "h.obj");
         }
 
         private static DMesh3 ComputeBoolean(DMesh3 outer, DMesh3 hole, MeshBoolean.boolOperation op, bool full = true)
@@ -143,11 +148,10 @@ namespace geometry3Test
             mBool.Compute(op);
             var ret = mBool.Result;
             
-
             if (full)
             {
-                PlanarRemesher p = new PlanarRemesher(ret);
-                p.Remesh();
+                //PlanarRemesher p = new PlanarRemesher(ret);
+                //p.Remesh();
 
                 MergeCoincidentEdges mrg = new MergeCoincidentEdges(ret);
                 mrg.ApplyIteratively();
