@@ -27,9 +27,13 @@ namespace geometry3Test
             TestUtil.isInteractive = true;
             // currently debugging this:
             // test_MeshOps.test_cut_forStudy();
-            test_Math.test_Issue_137();
+            // test_Math.test_Issue_137();
             // test_MeshOps.test_cut_coplanar();
+            test_MeshOps.test_cut_tri_overlap();
+
             // test_Bool.test_all();
+            // test_Bool.test_coplanar();
+
 
 #if DEBUG
             Console.WriteLine("Press Enter key to exit"); Console.ReadLine();

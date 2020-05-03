@@ -13,6 +13,46 @@ namespace geometry3Test
     class test_MeshOps
     {
 
+        internal static DMesh3 MakeTetra(Vector3d SquareCornerPosition, double size)
+        {
+            var vertices = new List<Vector3d>
+            {
+                SquareCornerPosition,              
+                new Vector3d(SquareCornerPosition.x + size, SquareCornerPosition.y, SquareCornerPosition.z),
+                new Vector3d(SquareCornerPosition.x, SquareCornerPosition.y + size, SquareCornerPosition.z),
+                new Vector3d(SquareCornerPosition.x, SquareCornerPosition.y, SquareCornerPosition.z + size),
+            };
+
+            var triangles = new List<Index3i>
+            {
+                new Index3i(0, 2, 1),
+                new Index3i(2, 3, 1),
+                new Index3i(0, 3, 2),
+                new Index3i(1, 3, 0),
+            };
+            return DMesh3Builder.Build(vertices, triangles);
+        }
+
+        internal static void test_cut_tri_overlap()
+        {
+            Vector3d p0 = new Vector3d(0, 0, 0);
+            var Tri0 = MakeTetra(p0, 2);
+            Vector3d p1 = new Vector3d(0, 0, 1);
+            var Tri1 = MakeTetra(p1, 2);
+
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            var meshCut = new MeshMeshCut();
+            meshCut.Target = Tri0;
+            meshCut.CutMesh = Tri1;
+            meshCut.Compute();
+            Console.WriteLine($"Done in {s.ElapsedMilliseconds} ms. ");
+            var outF = TestUtil.WriteTestOutputMesh(meshCut.Target, "test_cut_tri_overlap.obj");
+            Console.WriteLine($"Written to: {outF}");
+
+
+        }
+
         internal static void test_cut_forStudy()
         {
             Console.WriteLine("Testing cut coplanar.");

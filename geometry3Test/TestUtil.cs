@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using g3;
 
@@ -23,10 +24,13 @@ namespace geometry3Test
 			return Path.Combine(Program.TEST_OUTPUT_PATH + filename);
 		}
 
-
-
-        public static string WriteTestOutputMesh(IMesh mesh, string sFilename, bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
+        public static string WriteTestOutputMesh(IMesh mesh, string sFilename = "", bool write_groups = true, bool write_vtxcolors = false, bool write_vtxuv = false)
         {
+            if (string.IsNullOrWhiteSpace(sFilename))
+            {
+                StackTrace stackTrace = new StackTrace();
+                sFilename = stackTrace.GetFrame(1).GetMethod().Name + ".obj";
+            }
             OBJWriter writer = new OBJWriter();
 
             var fileName = Program.TEST_OUTPUT_PATH + sFilename;

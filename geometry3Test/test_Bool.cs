@@ -74,14 +74,16 @@ namespace geometry3Test
                 );
             DMesh3 ret = ComputeBoolean(outer, hole, MeshBoolean.boolOperation.Subtraction, true);
             
+            if (ret == null)
+                TestUtil.ConsoleError($"Null return from boolean: test_coplanar.");
             if (ret != null || !ret.IsClosed())
             {
-                var outF = TestUtil.WriteTestOutputMesh(ret, "programmatic.obj");
+                var outF = TestUtil.WriteTestOutputMesh(ret);
                 TestUtil.ConsoleError($"Error in boolean: test_coplanar: {outF}");
             }
         }
 
-        private static void test_multiple()
+        public static void test_multiple()
         {
             var outer = MakeBox(
                 center: new Vector3d(0, 0, 0),
@@ -140,6 +142,7 @@ namespace geometry3Test
             mBool.Tool = hole;
             mBool.Compute(op);
             var ret = mBool.Result;
+            
 
             if (full)
             {
@@ -148,6 +151,7 @@ namespace geometry3Test
 
                 MergeCoincidentEdges mrg = new MergeCoincidentEdges(ret);
                 mrg.ApplyIteratively();
+                Debug.Write("Closed: " + mBool.Result.IsClosed());
 
                 MeshRepairOrientation rep = new MeshRepairOrientation(ret);
                 rep.OrientComponents();

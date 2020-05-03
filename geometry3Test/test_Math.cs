@@ -144,10 +144,6 @@ namespace geometry3Test
 			}
 		}
 
-
-
-
-
         static void assert_same_hit(AxisAlignedBox3d aabox, Box3d obox, Ray3d ray, bool bIsAlwaysHit)
         {
             IntrRay3Box3 ohit = new IntrRay3Box3(ray, obox);
@@ -171,7 +167,6 @@ namespace geometry3Test
 
 
         /// https://github.com/gradientspace/geometry3Sharp/issues/137
-        // [TestMethod]
         public static void test_Issue_137()
         {
             Console.WriteLine("test_Issue_137");
@@ -190,7 +185,6 @@ namespace geometry3Test
             }
             Console.WriteLine();
         }
-
 
         // [RMS] this only tests some basic cases...
         public static void test_RayBoxIntersect()
