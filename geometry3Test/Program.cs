@@ -31,7 +31,8 @@ namespace geometry3Test
             // test_MeshOps.test_cut_coplanar();
             // test_MeshOps.test_cut_overlap_tetra();
 
-            test_Bool.test_all();
+            test_Bool.test_bool_rounding();
+            // test_Bool.test_all();
             // test_Bool.test_coplanar_box();
             // test_Bool.test_coplanar_tetra();
 

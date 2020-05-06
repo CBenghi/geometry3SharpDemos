@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace geometry3Test
 {
@@ -24,6 +25,8 @@ namespace geometry3Test
 
         internal static void test_all()
         {
+            test_bool_rounding();
+            test_bool_adjacent();
             test_coplanar_tetra();
             test_coplanar_box();
             test_multiple();
@@ -31,6 +34,52 @@ namespace geometry3Test
             test_subtraction();
             test_subtraction2();
             test_intersection();
+        }
+
+        internal static void test_bool_rounding()
+        {
+            // TestWithCloseNumber(1.4);
+            TestWithCloseNumber(1.499);
+            // TestWithCloseNumber(1.49999);
+        }
+
+        private static void TestWithCloseNumber(double closeEnough)
+        {
+            Console.WriteLine("test_bool_rounding");
+            var shape = MakeBox(
+                 center: new Vector3d(0, 0, 0),
+                 size: new Vector3d(2, 2, 2)
+                 );
+            var tool = MakeBox(
+                center: new Vector3d(0, 0, closeEnough),
+                size: new Vector3d(1, 1, 1)
+                );
+            DMesh3 ret;
+            using (var c = new ConsoleColorController())
+            {
+                ret = ComputeBoolean(shape, tool, MeshBoolean.boolOperation.Union, true);
+            }
+            if (IsNotNullAndClosed(ret))
+                TestUtil.ConsoleError("Test not implemented."); // even if it works we might want to test more 
+        }
+
+        internal static void test_bool_adjacent()
+        {
+            // in adjacent shapes, the membrane should be open
+            // 
+            Console.WriteLine("test_bool_adjacent");
+            var shape = MakeBox(
+                 center: new Vector3d(0, 0, 0),
+                 size: new Vector3d(2, 2, 2)
+                 );
+            var tool = MakeBox(
+                center: new Vector3d(0, 0, 1.5),
+                size: new Vector3d(1, 1, 1)
+                );
+            DMesh3 ret = ComputeBoolean(shape, tool, MeshBoolean.boolOperation.Union, true);
+            IsNotNullAndClosed(ret);
+
+            TestUtil.ConsoleError("Test not implemented.");
         }
 
         internal static void test_coplanar_tetra()
