@@ -16,13 +16,13 @@ namespace geometry3Test
         internal static void test_MeshMeshCut_rounding()
         {
             // TestWithCloseNumber(1.4);
-            TestWithCloseNumber(1.499);
-            // TestWithCloseNumber(1.49999);
+            // TestWithCloseNumber(1.499);
+            TestWithCloseNumber(1.49999);
         }
 
         private static void TestWithCloseNumber(double closeEnough)
         {
-            Console.WriteLine("test_MeshMeshCut_rounding");
+            Console.WriteLine($"test_MeshMeshCut_rounding: {closeEnough}");
             var shape = test_Bool.MakeBox(
                  center: new Vector3d(0, 0, 0),
                  size: new Vector3d(2, 2, 2)
@@ -34,7 +34,7 @@ namespace geometry3Test
 
             MeshTransforms.Translate(shape, new Vector3d(1, 1, 1));
             MeshTransforms.Translate(tool, new Vector3d(1, 1, 1));
-
+            var error = false;
             DMesh3 ret;
             using (var c = new ConsoleColorController())
             {
@@ -42,13 +42,21 @@ namespace geometry3Test
                 meshCut.Target = shape;
                 meshCut.CutMesh = tool;
                 meshCut.Compute();
-                // meshCut.RemoveContained();
                 ret = meshCut.Target;
+
+                if (!ret.IsClosed())
+                    error = TestUtil.ConsoleError("Mesh is not closed.", ret) || error;
+                meshCut.RemoveContained();
+                if (ret.IsClosed())
+                    error = TestUtil.ConsoleError("Mesh should not be closed.", ret) || error;
+
+                if (ret.BoundaryEdgeIndices().Count() != 8)
+                {
+                    error = TestUtil.ConsoleError($"Mesh should have 8 open edges. It has {ret.BoundaryEdgeIndices().Count()}.", ret) || error;
+                }
             }
-            
-            Util.WriteDebugMesh(ret, "", "ret");
-            
-            // TestUtil.ConsoleError("Test not implemented."); // even if it works we might want to test more 
+            if (!error)
+                Console.WriteLine("ok");
         }
 
         internal static DMesh3 MakeTetra(Vector3d SquareCornerPosition, double size)

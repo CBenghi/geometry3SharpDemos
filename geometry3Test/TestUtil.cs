@@ -105,13 +105,20 @@ namespace geometry3Test
         public static bool isInteractive { get; set; } = false;
 
 
-        internal static void ConsoleError(string errorMessage)
+        internal static bool ConsoleError(string errorMessage, DMesh3 mesh = null)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(errorMessage);
-            Console.ResetColor();
+            
             if (!isInteractive)
                 throw new Exception("Test not passed.");
+            if (mesh != null)
+            {
+                var fn = WriteTestOutputMesh(mesh);
+                Console.WriteLine(fn);
+            }
+            Console.ResetColor();
+            return true;
         }
 
         public static void WriteTestOutputStrings(string[] lines, string sFilename)
