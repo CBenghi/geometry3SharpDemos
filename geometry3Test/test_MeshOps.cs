@@ -13,6 +13,44 @@ namespace geometry3Test
     class test_MeshOps
     {
 
+        internal static void test_MeshMeshCut_rounding()
+        {
+            // TestWithCloseNumber(1.4);
+            TestWithCloseNumber(1.499);
+            // TestWithCloseNumber(1.49999);
+        }
+
+        private static void TestWithCloseNumber(double closeEnough)
+        {
+            Console.WriteLine("test_MeshMeshCut_rounding");
+            var shape = test_Bool.MakeBox(
+                 center: new Vector3d(0, 0, 0),
+                 size: new Vector3d(2, 2, 2)
+                 );
+            var tool = test_Bool.MakeBox(
+                center: new Vector3d(0, 0, closeEnough),
+                size: new Vector3d(1, 1, 1)
+                );
+
+            MeshTransforms.Translate(shape, new Vector3d(1, 1, 1));
+            MeshTransforms.Translate(tool, new Vector3d(1, 1, 1));
+
+            DMesh3 ret;
+            using (var c = new ConsoleColorController())
+            {
+                var meshCut = new MeshMeshCut();
+                meshCut.Target = shape;
+                meshCut.CutMesh = tool;
+                meshCut.Compute();
+                // meshCut.RemoveContained();
+                ret = meshCut.Target;
+            }
+            
+            Util.WriteDebugMesh(ret, "", "ret");
+            
+            // TestUtil.ConsoleError("Test not implemented."); // even if it works we might want to test more 
+        }
+
         internal static DMesh3 MakeTetra(Vector3d SquareCornerPosition, double size)
         {
             var vertices = new List<Vector3d>

@@ -25,13 +25,14 @@ namespace geometry3Test
             Util.DebugBreakOnDevAssert = true;
 #endif
             TestUtil.isInteractive = true;
+            test_MeshOps.test_MeshMeshCut_rounding();
             // currently debugging this:
             // test_MeshOps.test_cut_forStudy();
             // test_Math.test_Issue_137();
             // test_MeshOps.test_cut_coplanar();
             // test_MeshOps.test_cut_overlap_tetra();
 
-            test_Bool.test_bool_rounding();
+            // test_Bool.test_bool_rounding();
             // test_Bool.test_all();
             // test_Bool.test_coplanar_box();
             // test_Bool.test_coplanar_tetra();
