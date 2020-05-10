@@ -25,7 +25,9 @@ namespace geometry3Test
             Util.DebugBreakOnDevAssert = true;
 #endif
             TestUtil.isInteractive = true;
-            test_MeshOps.test_MeshMeshCut_rounding();
+            // test_MeshGen.test_TriangulatedPolygonGenerator_114();
+            test_MeshCutPrecursors.all();
+            // test_MeshOps.test_MeshMeshCut_rounding();
             // currently debugging this:
             // test_MeshOps.test_cut_forStudy();
             // test_Math.test_Issue_137();
@@ -46,7 +48,7 @@ namespace geometry3Test
             test_PlanarRemesher.Test_remesh();
             
             test_MeshOps.test_MergeCoincidentEdges();
-            test_MeshGen.test_TriangulatedPolygonGenerator_114();
+            
             
             
             

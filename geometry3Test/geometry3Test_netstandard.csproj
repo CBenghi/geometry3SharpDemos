@@ -80,6 +80,7 @@
     <Compile Include="test_DMesh3.cs" />
     <Compile Include="test_Deformers.cs" />
     <Compile Include="test_Grids.cs" />
+    <Compile Include="test_MeshCutPrecursors.cs" />
     <Compile Include="test_PlanarRemesher.cs" />
     <Compile Include="test_MeshOps.cs" />
     <Compile Include="test_MeshRegionBoundary.cs" />

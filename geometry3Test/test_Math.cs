@@ -279,6 +279,5 @@ namespace geometry3Test
             System.Console.WriteLine("hit {0} of {1} rays", hits, N * InnerN);
         }
 
-
 	}
 }

@@ -14,10 +14,10 @@ namespace geometry3Test
         {
             gen.Generate();
             DMesh3 mesh = gen.MakeDMesh();
-            TestUtil.WriteTestOutputMesh(mesh, sFilename, true, true, true);
+            var writtenFileName = TestUtil.WriteTestOutputMesh(mesh, sFilename, true, true, true);
             string tex_header = "mtllib checker.mtl\r\nusemtl checker\r\n";
-            string cur = File.ReadAllText(Program.TEST_OUTPUT_PATH+sFilename);
-            File.WriteAllText(Program.TEST_OUTPUT_PATH+sFilename, tex_header + cur);
+            string cur = File.ReadAllText(writtenFileName);
+            File.WriteAllText(writtenFileName, tex_header + cur);
         }
 
         public static void test_basic_generators()
