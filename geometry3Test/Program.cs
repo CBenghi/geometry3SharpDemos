@@ -26,8 +26,9 @@ namespace geometry3Test
 #endif
             TestUtil.isInteractive = true;
             // test_MeshGen.test_TriangulatedPolygonGenerator_114();
-            test_MeshCutPrecursors.all();
-            // test_MeshOps.test_MeshMeshCut_rounding();
+            // test_MeshCutPrecursors.all();
+            // test_MeshOps.test_MeshMeshCut_CutInSingleTriangle();
+            test_MeshOps.test_MeshMeshCut_rounding();
             // currently debugging this:
             // test_MeshOps.test_cut_forStudy();
             // test_Math.test_Issue_137();

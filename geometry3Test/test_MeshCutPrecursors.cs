@@ -47,7 +47,7 @@ namespace geometry3Test
         {
             Console.WriteLine("test_meshGen3");
             TriangulatedPolygonGenerator tg = new TriangulatedPolygonGenerator();
-            tg.Polygon = new GeneralPolygon2d(new Polygon2d(
+            var poly = new Polygon2d(
                 new List<Vector2d>()
                 {
                     // clockwise
@@ -59,8 +59,9 @@ namespace geometry3Test
                     new Vector2d(2,7),
                     new Vector2d(2,2.00001),
                     new Vector2d(2,2)
-                }
-                ));
+                });
+
+            tg.Polygon = new GeneralPolygon2d(poly);
             tg.Generate();
             var mesh = tg.MakeDMesh();
 
